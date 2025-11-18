@@ -1,0 +1,62 @@
+import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import { CheckboxGroup, Checkbox } from '../index.ts'
+
+<Meta title='MDX/CheckboxGroup' component={CheckboxGroup} />
+
+export const Template = args => <CheckboxGroup {...args} />
+
+##Checkbox Group
+
+This Doc will gives you a brief description of the Checkbox group
+component.
+
+Follow below code snippet to useCheckboxGroup and Checkbox components.
+
+```tsx
+import { Checkbox, CheckboxGroup } from '@hive-frontend/design-system'
+
+return (
+   <CheckboxGroup
+      label='Favorite pet Favorite pet'
+      onChange={(value: string[]) => console.log(value)}
+      {...props}
+   >
+      <Checkbox value='dogs'>Dog</Checkbox>
+      <Checkbox value='cats'>Cats 1</Checkbox>
+   </CheckboxGroup>
+)
+```
+
+**CheckboxGroup Props**
+
+```tsx
+interface CheckboxGroupProps extends AriaCheckboxGroupProps {
+   children: React.ReactNode
+   onChange: (value: string[]) => void
+   hint?: React.ReactNode
+   errorMessage?: string
+   isRequired?: boolean
+   containerClassName?: string
+   size: Small | Medium
+}
+```
+
+**Checkbox Props**
+
+```tsx
+interface CheckboxProps extends AriaCheckboxGroupItemProps {}
+```
+
+### Version 1.0.0
+
+**Follow storybook stories to know about the cases to covered in CheckboxGroup.**
+
+#### **Compromised things**
+
+-  Due to design team dependencies we have compromised in below things.
+
+   -  Styles of CheckboxGroup label
+   -  Styles of Checkbox button label
+   -  Styles of Hint and Error withCheckbox group
+
+*  Focus state, here on key press we are directly selecting the Checkbox button (inspired from adobe design system) so here we won't get the focused state.

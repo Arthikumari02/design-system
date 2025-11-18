@@ -1,0 +1,46 @@
+import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import { Hint } from '../index.ts'
+
+<Meta title='MDX/Hint' component={Hint} />
+
+export const Template = args => <Hint {...args} />
+
+## Hint
+
+This Doc will gives you a brief description of the Label component.
+
+**Hint Props**
+
+```tsx
+export interface HintProps {
+   id: string
+   hint?: ReactNode
+   error?: ReactNode
+   containerClassName?: string
+   size?: BasicSize
+   renderLeftIcon?: () => ReactNode
+   renderRightIcon?: () => ReactNode
+}
+```
+
+Follow below code snippet to use DateField.
+
+```tsx
+import { Hint } from '@hive-frontend/design-system'
+
+return (
+   <ThemeContextProvider theme={defaultTheme}>
+      <Hint
+         id='Hint-1'
+         error='Something went wrong'
+         hint=''
+         size={'ExtraSmall'}
+         {...props}
+      />
+   </ThemeContextProvider>
+)
+```
+
+### Version 1.0.0
+
+**Follow storybook stories to know about the cases covered in DateField.**

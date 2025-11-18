@@ -1,0 +1,53 @@
+.popover-animation {
+   opacity: 0;
+   transition:
+      transform 0.13s ease-in-out,
+      opacity 0.13s ease-in-out,
+      visibility 0ms linear 0.13s;
+
+   pointer-events: none;
+}
+
+.popover-animation.is-open {
+   visibility: visible;
+   opacity: 0.9999;
+   transition-delay: 0ms;
+   pointer-events: auto;
+}
+
+.popover-animation--top.is-open {
+   transform: translateY(-5px);
+}
+.popover-animation--right.is-open {
+   transform: translateX(5px);
+}
+.popover-animation--bottom.is-open {
+   transform: translateY(5px);
+}
+.popover-animation--left.is-open {
+   transform: translateX(-5px);
+}
+.popover-animation--center.is-open {
+   transform: translateY(5px);
+}
+
+.popover-scrollbar {
+   overflow: overlay;
+   display: flex;
+   flex-direction: column;
+   margin-right: 4px;
+}
+.popover-scrollbar::-webkit-scrollbar {
+   width: 8px;
+   display: none;
+}
+
+.popover-scrollbar::-webkit-scrollbar-track {
+   border-radius: 8px;
+   background-color: transparent;
+}
+
+.popover-scrollbar::-webkit-scrollbar-thumb {
+   border-radius: 8px;
+   background-color: #eaecf0;
+}

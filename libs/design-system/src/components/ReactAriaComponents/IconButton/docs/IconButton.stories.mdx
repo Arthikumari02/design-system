@@ -1,0 +1,25 @@
+import { Canvas, Meta, Story } from '@storybook/addon-docs'
+
+import { IconButton } from '..'
+
+<Meta title='MDX/IconButton' component={IconButton} />
+
+export const SampleIconButton = args => <IconButton {...args} />
+
+## IconButton
+
+This Doc will gives you a brief description of the IconButton component.
+
+**Version v1.0.0**
+
+-  All variants in Primary, Secondary, Tertiary
+-  All sizes like sm, md, lg, xl, 2xl.
+
+#### **Available subVariants in each Hierarchy**
+
+| hierarchy   | subVariant                                              |
+| ----------- | ------------------------------------------------------- |
+| `PRIMARY`   | PRIMARY, DESTRUCTIVE                                    |
+| `SECONDARY` | PRIMARY, DESTRUCTIVE, DESTRUCTIVE_OUTLINE, GRAY_OUTLINE |
+| `TERTIARY`  | PRIMARY, DESTRUCTIVE, GRAY                              |
+|             |

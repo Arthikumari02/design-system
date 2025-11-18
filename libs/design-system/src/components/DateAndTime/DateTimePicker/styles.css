@@ -1,0 +1,10 @@
+.date-time-input::-webkit-outer-spin-button,
+.date-time-input::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+   margin: 0;
+}
+
+/* Firefox */
+.date-time-input[type='number'] {
+   -moz-appearance: textfield;
+}

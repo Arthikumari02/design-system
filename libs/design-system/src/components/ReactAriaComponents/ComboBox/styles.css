@@ -1,0 +1,19 @@
+.combobox-list-box {
+   overflow: auto;
+   display: flex;
+   flex-direction: column;
+}
+
+.combobox-list-box::-webkit-scrollbar {
+   width: 8px;
+}
+
+.combobox-list-box::-webkit-scrollbar-track {
+   border-radius: 8px;
+   background-color: transparent;
+}
+
+.combobox-list-box::-webkit-scrollbar-thumb {
+   border-radius: 8px;
+   background-color: var(--gray-slate-200);
+}

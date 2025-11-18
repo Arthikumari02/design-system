@@ -1,0 +1,45 @@
+import { Canvas, Meta, Story } from '@storybook/addon-docs'
+import { Label } from '../index.ts'
+
+<Meta title='MDX/Label' component={Label} />
+
+export const Template = args => <Label {...args} />
+
+## Label
+
+This Doc will gives you a brief description of the Label component.
+
+**Label Props**
+
+```tsx
+export type LabelProps = {
+   /** An HTML ID attribute that will be attached to the the rendered component. Useful for targeting it from tests */
+   id?: string
+   /** The content of this label */
+   children: ReactNode
+   /** Additional props to spread over the label component */
+   labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>
+   isRequired?: boolean
+   renderRequiredIcon?: () => React.ReactElement
+   containerClassName?: string
+   size?: BasicSize
+}
+```
+
+Follow below code snippet to use DateField.
+
+```tsx
+import { Label } from '@hive-frontend/design-system'
+
+return (
+   return (
+      <ThemeContextProvider theme={defaultTheme}>
+         <Label isRequired={false} size={"Small"}>First Name</Label>
+      </ThemeContextProvider>
+   )
+)
+```
+
+### Version 1.0.0
+
+**Follow storybook stories to know about the cases covered in DateField.**

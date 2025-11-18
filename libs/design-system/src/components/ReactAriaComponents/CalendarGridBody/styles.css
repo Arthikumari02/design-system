@@ -1,0 +1,8 @@
+.calender-cell-dot {
+   width: 5px;
+   height: 5px;
+   position: absolute;
+   border-radius: 50%;
+   left: calc(50% - 5px / 2);
+   bottom: 4px;
+}

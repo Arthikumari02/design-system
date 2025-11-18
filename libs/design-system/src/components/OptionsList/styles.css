@@ -1,0 +1,50 @@
+.list-editable-picker-container-async .react-aria-ListBox {
+   overflow: auto;
+   display: flex;
+   flex-direction: column;
+   overflow-y: auto;
+   max-height: 404px;
+   outline: none;
+   padding-bottom: 4px;
+}
+.list-editable-picker-container-async .react-aria-ListBox:focus {
+   outline: none;
+}
+.list-editable-picker-container-async .react-aria-ListBox:active {
+   outline: none;
+}
+.list-editable-picker-container-async .react-aria-ListBox::-webkit-scrollbar {
+   width: 8px;
+}
+
+.list-editable-picker-container-async
+   .react-aria-ListBox::-webkit-scrollbar-track {
+   border-radius: 8px;
+   background-color: transparent;
+}
+
+.list-editable-picker-container-async
+   .react-aria-ListBox::-webkit-scrollbar-thumb {
+   border-radius: 8px;
+   background-color: var(--gray-slate-200);
+}
+
+.input-and-selected-tags-container::-webkit-scrollbar {
+   width: 8px;
+}
+.input-and-selected-tags-container::-webkit-scrollbar-track {
+   border-radius: 8px;
+   background-color: transparent;
+}
+
+.input-and-selected-tags-container::-webkit-scrollbar-thumb {
+   border-radius: 8px;
+   background-color: var(--gray-slate-200);
+}
+
+.options-list-search-input {
+   &::-webkit-search-cancel-button,
+   &::-webkit-search-decoration {
+      -webkit-appearance: none;
+   }
+}

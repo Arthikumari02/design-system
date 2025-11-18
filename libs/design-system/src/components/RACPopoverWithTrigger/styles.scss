@@ -1,0 +1,6 @@
+// NOTE: Setting the z-index to 99999 so that the popover underlay is always on top of the rest of the screen & disable other interactions
+// TODO: Need to check and pass this from constants to rac components itself instead of styles.scss
+
+[data-testid='underlay'] {
+   z-index: 99999;
+}

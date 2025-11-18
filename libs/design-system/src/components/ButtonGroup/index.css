@@ -1,0 +1,16 @@
+.menu-options-list-scrollbar {
+   overflow-y: auto;
+}
+.menu-options-list-scrollbar::-webkit-scrollbar {
+   width: 4px;
+}
+
+.menu-options-list-scrollbar::-webkit-scrollbar-track {
+   border-radius: 19px;
+   background-color: transparent;
+}
+
+.menu-options-list-scrollbar::-webkit-scrollbar-thumb {
+   border-radius: 19px;
+   background-color: #eaecf0;
+}

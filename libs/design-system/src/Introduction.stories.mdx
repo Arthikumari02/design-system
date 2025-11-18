@@ -1,0 +1,206 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title='Introduction' component={() => <></>} />
+
+export const Template = args => () => <></>
+
+## Introduction
+
+Hey! Introduce yourself to the **Task Flow Design System** - _The world of components_.
+
+Task Flow Design system is a collection of reusable components that are designed to be used & developed together.
+
+Building a new reusable component for the team? Go ahead and make the lives better!
+
+## But how?
+
+#### **Install the dependencies**
+
+You need to install the dependencies before you can start using the components.
+
+```bash
+  yarn install
+```
+
+NOTE: We're using `yarn` to install the dependencies. If you're using `npm`, please use `npm install` instead.
+
+#### **Start the server**
+
+Run the server by running the following command:
+
+```bash
+  nx run design-system:storybook
+```
+
+You'll see the server running on port `4400`. You can see all the components in the storybook on `localhost:4400`.
+Play around with them to get a feel of the components.
+
+#### **Create a component**
+
+Develop the component according to the design and the use cases that need to be covered.
+Export your component from the `src/index` file.
+
+#### **Writing a story**
+
+-  Create a file parallel to the component file.
+-  Name the file `<component_name>.stories.*/js,tsx`(Currently we're using TypeScript, so we're using `.tsx` extension).
+-  Import the component and export it as default export from the file as follows:
+
+```tsx
+import { Meta } from '@storybook/react'
+import { ComboBox } from '.'
+
+export default {
+   title: 'Components/Combobox',
+   component: ComboBox
+} as Meta
+```
+
+-  Now you should be able to see the added component in the storybook.
+-  We can also add the description of the component in the story. Observe the changes below.
+
+```tsx
+export default {
+   title: 'Components/Combobox',
+   component: ComboBox,
+   parameters: {
+      docs: {
+         description: {
+            component: 'This is a description of the component'
+         }
+      }
+   }
+} as Meta
+```
+
+-  Here the `component` key will accept the markdown string or plain string that will be rendered at the start of the component in the `docs` block of the storybook.
+
+-  Now we have a component in the storybook with a short description. We can add more stories to the component to document the different use cases.
+
+-  We can export multiple stories from the same file. Following is the different story for the `Combobox` component.
+
+```tsx
+export const AsyncCombobox = () => {
+
+  interface StarWarsChar {
+    name: string
+    url: string
+  }
+
+  const list = useAsyncList<StarWarsChar>({
+    ...
+  })
+
+  const onSelectionChange = (key) => {
+   ...
+  }
+
+  const onInputChange = (value) => {
+    ...
+  }
+
+  return (
+    <ComboBox
+      label="Star Wars Character Lookup"
+      selectedKey={list.selectedKeys[0]}
+      onSelectionChange={onSelectionChange}
+      options={list.items as any}
+      inputValue={list.filterText}
+      onInputChange={onInputChange}
+      loadingState={list.loadingState}
+      onLoadMore={list.loadMore}
+      onOpenChange={action("onOpenChange")}
+      placeholder="Search for a character"
+      getListItemKey={(item) => item.name}
+      error=""
+      renderListItem={({ item }) => <p>{item.name}</p>}
+    />
+  )
+}
+
+```
+
+-  Similar to the description we've added to the component, we can add the description to the story as well.
+
+```tsx
+AsyncCombobox.parameters = {
+   docs: {
+      description: {
+         story: '- Use `useAsyncList` hook to get the `list` which provides all the methods and properties to handle the AsyncCombobox. \n- Handles API based on filter text and infinite scroll will trigger the `loadMore` function which will be available in `list`.\n- Provides all the usecases of `Default ComboBox`'
+      }
+   }
+}
+```
+
+-  Let's add all the things together and see how the component looks like.
+
+```tsx
+import React from "react"
+import { Meta } from "@storybook/react"
+import { action } from "@storybook/addon-actions"
+
+// Exporting the default component by default
+export default {
+  title: "Components/Combobox",
+  component: ComboBox,
+  parameters: {
+    docs: {
+      description: {
+        component: "This is a description of the component",
+      },
+    },
+  },
+} as Meta
+
+// Adding new story to the combobox component
+export const AsyncCombobox = () => {
+
+  interface StarWarsChar {
+    name: string
+    url: string
+  }
+
+  const list = useAsyncList<StarWarsChar>({
+    ...
+  })
+
+  const onSelectionChange = (key) => {
+   ...
+  }
+
+  const onInputChange = (value) => {
+    ...
+  }
+
+  return (
+    <ComboBox
+      label="Star Wars Character Lookup"
+      selectedKey={list.selectedKeys[0]}
+      onSelectionChange={onSelectionChange}
+      options={list.items as any}
+      inputValue={list.filterText}
+      onInputChange={onInputChange}
+      loadingState={list.loadingState}
+      onLoadMore={list.loadMore}
+      onOpenChange={action("onOpenChange")}
+      placeholder="Search for a character"
+      getListItemKey={(item) => item.name}
+      error=""
+      renderListItem={({ item }) => <p>{item.name}</p>}
+    />
+  )
+}
+
+AsyncCombobox.parameters = {
+  docs: {
+    description: {
+      story:
+        "- Use `useAsyncList` hook to get the `list` which provides all the methods and properties to handle the AsyncCombobox. \n- Handles API based on filter text and infinite scroll will trigger the `loadMore` function which will be available in `list`.\n- Provides all the usecases of `Default ComboBox`",
+    },
+  },
+}
+```
+
+## References
+
+-  [Best Practices](https://medium.com/storybookjs/storybook-6-migration-guide-200346241bb5)

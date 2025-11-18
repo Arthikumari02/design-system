@@ -1,0 +1,22 @@
+.toggle-switch-cursor-not-allowed-styles label {
+   cursor: not-allowed !important;
+}
+
+/* Styles migrated from styled ToggleContainer (scoped by .toggle-container) */
+.toggle-container {
+   line-height: 0px;
+}
+.toggle-container input[type='checkbox']:checked + label:after {
+   /* Use CSS var injected from component for thumb width */
+   margin-left: calc(100% - var(--thumb-width) - 2px) !important;
+}
+.toggle-container input[type='checkbox'] + label {
+   background: transparent !important;
+}
+.toggle-container input[type='checkbox']:disabled + label:after {
+   background-color: var(--toggle-button-fg_disabled) !important;
+}
+.toggle-container input[type='checkbox'] + label:after {
+   /* xxs spacing (~2px) */
+   margin-left: 2px !important;
+}

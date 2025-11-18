@@ -1,0 +1,13 @@
+.select-listbox::-webkit-scrollbar {
+   width: 8px;
+}
+
+.select-listbox::-webkit-scrollbar-track {
+   border-radius: 8px;
+   background-color: transparent;
+}
+
+.select-listbox::-webkit-scrollbar-thumb {
+   border-radius: 8px;
+   background-color: var(--gray-slate-200);
+}
