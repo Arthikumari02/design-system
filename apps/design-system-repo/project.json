@@ -1,0 +1,8 @@
+{
+  "name": "design-system-repo",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/design-system-repo/src",
+  "projectType": "application",
+  "targets": {},
+  "tags": []
+}
