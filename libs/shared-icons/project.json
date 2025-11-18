@@ -1,0 +1,8 @@
+{
+  "name": "shared-icons",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared-icons/src",
+  "projectType": "library",
+  "targets": {},
+  "tags": []
+}
