@@ -106,10 +106,10 @@ const Tab = (props: Props) => {
                   <span>{tabItem.name}</span>
                   {tabItem.rightEnhancer
                      ? tabItem.rightEnhancer(
-                          shouldShowHoverStyles
-                             ? isHovered || isSelected
-                             : isSelected
-                       )
+                        shouldShowHoverStyles
+                           ? isHovered || isSelected
+                           : isSelected
+                     )
                      : null}
                </>
             )}
@@ -126,7 +126,7 @@ const Tab = (props: Props) => {
       >
          {renderTabChildrenWrapper
             ? (props: TabRenderProps) =>
-                 renderTabChildrenWrapper(renderTabChildren(props), tabItem)
+               renderTabChildrenWrapper(renderTabChildren(props), tabItem)
             : renderTabChildren}
       </RACTab>
    )
