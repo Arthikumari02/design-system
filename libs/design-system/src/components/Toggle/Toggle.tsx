@@ -1,16 +1,12 @@
 import cn from 'classnames'
 import { observer } from 'mobx-react'
 import React, { useEffect, useState } from 'react'
-import { Toggle as ToggleSwitch } from 'react-toggle-component'
+import Switch from 'react-switch'
 
 import { SPACE_BAR_KEY_CODE } from '../../constants/KeyboardConstants'
-
 import { TOGGLE_THEME } from '../../Theme/components/ToggleTheme'
 import { SmallAndMedium } from '../../types'
-
 import { FocusRing } from '../FocusRing'
-
-import './index.css'
 import { toggleSizes } from './sizes'
 
 export interface ToggleProps {
@@ -50,24 +46,22 @@ const Toggle = (props: ToggleProps) => {
    const focusRingVariant = disabled
       ? 'None'
       : isChecked
-        ? 'Primary'
-        : 'GraySecondary'
+         ? 'Primary'
+         : 'GraySecondary'
 
-   const toggleClassName = cn(
-      '!m-0',
-      disabled ? 'toggle-switch-cursor-not-allowed-styles' : ''
-   )
+   const switchStyles = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+   }
 
    useEffect(() => {
       setIsChecked(checked)
    }, [checked])
 
-   const handleChange = (e: React.ChangeEvent<Element>) => {
-      //TODO: Getting ts error so kept ts-ignore, need to discuss and update
-      //@ts-ignore
-      setIsChecked(e.target.checked)
-      //@ts-ignore
-      onChange(e.target.checked)
+   const handleChange = (checked: boolean) => {
+      setIsChecked(checked)
+      onChange(checked)
    }
 
    const onKeyDown = (event: any) => {
@@ -78,28 +72,26 @@ const Toggle = (props: ToggleProps) => {
    }
 
    return (
-      <FocusRing variant={focusRingVariant} focusClass={'rounded-[256px]'}>
+      <FocusRing variant={focusRingVariant} focusClass={'rounded-full'}>
          <div
             tabIndex={0}
             onKeyDown={onKeyDown}
             className={cn(containerClassName, 'toggle-container')}
-            style={{ ['--thumb-width' as any]: thumbStyles.width }}
          >
-            <ToggleSwitch
-               leftBackgroundColor={leftBackgroundColor}
-               rightBackgroundColor={rightBackgroundColor}
-               borderWidth={'0px'}
-               knobColor={knobColor}
-               onToggle={handleChange}
+            <Switch
+               onChange={handleChange}
                checked={isChecked}
-               controlled={true}
                disabled={disabled}
-               width={trackStyles.width}
-               height={trackStyles.height}
-               knobWidth={thumbStyles.width}
-               knobHeight={thumbStyles.height}
-               className={toggleClassName}
-               name={name}
+               onColor={leftBackgroundColor}
+               offColor={rightBackgroundColor}
+               handleDiameter={parseInt(thumbStyles.height)}
+               height={parseInt(trackStyles.height)}
+               width={parseInt(trackStyles.width)}
+               className="react-switch"
+               activeBoxShadow="0 0 2px 3px #3bf"
+               uncheckedIcon={false}
+               checkedIcon={false}
+               boxShadow="0px 1px 2px rgba(0, 0, 0, 0.1)"
             />
          </div>
       </FocusRing>

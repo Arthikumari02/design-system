@@ -1,19 +1,30 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "module": "commonjs",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "files": [],
-  "include": [],
-  "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    }
-  ]
+   "extends": "../../tsconfig.base.json",
+   "compilerOptions": {
+      "module": "Node16",
+      "moduleResolution": "Node16",
+      "jsx": "react-jsx",
+      "allowJs": false,
+      "esModuleInterop": false,
+      "allowSyntheticDefaultImports": true,
+      "strict": true,
+      "baseUrl": ".",
+      "paths": {
+         "@shared/icons": ["../../libs/shared-icons/src/index.ts"],
+         "@design-system/*": ["src/*"]
+      }
+   },
+   "files": [],
+   "include": ["twin.d.ts", "tailwind.config.js"],
+   "references": [
+      {
+         "path": "./tsconfig.lib.json"
+      },
+      {
+         "path": "./tsconfig.spec.json"
+      },
+      {
+         "path": "./tsconfig.storybook.json"
+      }
+   ]
 }

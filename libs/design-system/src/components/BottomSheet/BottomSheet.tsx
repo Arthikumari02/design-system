@@ -8,7 +8,7 @@ import {
    useMotionTemplate,
    useMotionValue,
    useTransform
-} from 'motion/react'
+} from 'framer-motion'
 import { ReactElement, useEffect, useRef } from 'react'
 import { Dialog, Modal, ModalOverlay } from 'react-aria-components'
 

@@ -2,7 +2,7 @@ import React from 'react'
 
 import Tabs from '../Tabs'
 
-import { DefaultStory } from './DefaultStory'
+import { DefaultStory } from './Default.stories'
 
 export default {
    component: Tabs,
