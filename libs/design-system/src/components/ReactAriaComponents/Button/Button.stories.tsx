@@ -1,141 +1,114 @@
-import React from 'react'
+import React from "react";
 import { StoryFn, Meta } from '@storybook/react'
-
-import { RadioUnSelectedIcon } from '../../../icons/RadioUnSelectedIcon'
-import { UserIcon } from '../../../icons/UserIcon'
-
-import { Button, Hierarchy, SubVariant } from '.'
-import { ButtonSize } from '../../../types'
+import { RadioUnSelectedIcon } from "../../../icons/RadioUnSelectedIcon";
+import { UserIcon } from "../../../icons/UserIcon";
+import { action } from "@storybook/addon-actions";
+import Button from "./Button";
+import { Hierarchy, SubVariant } from "../../../types/ButtonTypes";
+import { ButtonSize } from "../../../types";
 
 export default {
-   title: 'Components/Button',
+   title: "Components/Button",
    component: Button,
    argTypes: {
-      hierarchy: {
-         control: { type: 'select' },
-         options: Object.values(Hierarchy)
-      },
-      subVariant: {
-         control: { type: 'select' },
-         options: Object.values(SubVariant)
-      },
+      hierarchy: { control: "select", options: Object.values(Hierarchy) },
+      subVariant: { control: "select", options: Object.values(SubVariant) },
       size: {
-         control: { type: 'select' },
-         options: [
-            'ExtraSmall',
-            'Small',
-            'Medium',
-            'Large',
-            'ExtraLarge',
-            'DoubleExtraLarge'
-         ]
+         control: "select",
+         options: ["ExtraSmall", "Small", "Medium", "Large", "ExtraLarge", "DoubleExtraLarge"],
       },
-      isDisabled: { control: 'boolean' },
-      isLoading: { control: 'boolean' },
-      shouldShrinkButtonWhileLoading: { control: 'boolean' },
-      autoFocus: { control: 'boolean' }
-   }
-} as Meta<typeof Button>
+      isDisabled: { control: "boolean" },
+      isLoading: { control: "boolean" },
+      shouldShrinkButtonWhileLoading: { control: "boolean" },
+      children: { control: "text" },
+   },
+} as Meta<typeof Button>;
 
-const Template: StoryFn<typeof Button> = args => <Button {...args} />
+const Template: StoryFn<typeof Button> = (args) => (
+   <Button {...args}
+      onPress={action("Button Pressed")}
+   >
+      <Button.ButtonLeftIcon render={(c) => <UserIcon className={c.stroke} />} />
+      <Button.Text>{args.children}</Button.Text>
+      {args.isLoading && <Button.Loader />}
+   </Button>
+);
 
-export const Playground = Template.bind({})
+
+export const Playground = Template.bind({});
 Playground.args = {
    hierarchy: Hierarchy.Secondary,
    subVariant: SubVariant.Primary,
-   size: 'Medium',
-   children: 'Button Text',
-   isDisabled: false,
-   isLoading: false,
-   leftIcon: ({ stroke }) => <UserIcon className={stroke} />
-}
+   size: "Medium",
+   children: "Button Text",
+};
 
-/**
- * This story displays a matrix of all button hierarchies and their subvariants,
- * each showing normal, disabled, and loading states.
- */
 export const VariantMatrix = () => {
    const variants = [
       {
          hierarchy: Hierarchy.Primary,
-         title: 'Primary',
+         title: "Primary",
          subVariants: [
-            { variant: SubVariant.Primary, label: 'Primary' },
-            { variant: SubVariant.Destructive, label: 'Destructive' }
-         ]
+            { variant: SubVariant.Primary, label: "Primary" },
+            { variant: SubVariant.Destructive, label: "Destructive" },
+         ],
       },
       {
          hierarchy: Hierarchy.Secondary,
-         title: 'Secondary',
+         title: "Secondary",
          subVariants: [
-            { variant: SubVariant.Primary, label: 'Primary' },
-            { variant: SubVariant.GrayOutline, label: 'Gray Outline' },
-            {
-               variant: SubVariant.DestructiveOutline,
-               label: 'Destructive Outline'
-            }
-         ]
+            { variant: SubVariant.Primary, label: "Primary" },
+            { variant: SubVariant.GrayOutline, label: "Gray Outline" },
+            { variant: SubVariant.DestructiveOutline, label: "Destructive Outline" },
+         ],
       },
       {
          hierarchy: Hierarchy.Tertiary,
-         title: 'Tertiary',
+         title: "Tertiary",
          subVariants: [
-            { variant: SubVariant.Primary, label: 'Primary' },
-            { variant: SubVariant.Gray, label: 'Gray' },
-            { variant: SubVariant.Destructive, label: 'Destructive' }
-         ]
+            { variant: SubVariant.Primary, label: "Primary" },
+            { variant: SubVariant.Gray, label: "Gray" },
+            { variant: SubVariant.Destructive, label: "Destructive" },
+         ],
       },
       {
          hierarchy: Hierarchy.Link,
-         title: 'Link',
+         title: "Link",
          subVariants: [
-            { variant: SubVariant.Primary, label: 'Primary' },
-            { variant: SubVariant.Gray, label: 'Gray' },
-            { variant: SubVariant.Destructive, label: 'Destructive' }
-         ]
-      }
-   ]
+            { variant: SubVariant.Primary, label: "Primary" },
+            { variant: SubVariant.Gray, label: "Gray" },
+            { variant: SubVariant.Destructive, label: "Destructive" },
+         ],
+      },
+   ];
 
    return (
       <div>
          {variants.map(({ hierarchy, title, subVariants }) => (
-            <div key={hierarchy} className='mb-8'>
-               <h3 className='text-lg font-bold mb-4'>{title} Hierarchy</h3>
-               <div className='grid grid-cols-3 gap-4'>
+            <div key={hierarchy} className="mb-8">
+               <h3 className="text-lg font-bold mb-4">{title} Hierarchy</h3>
+               <div className="grid grid-cols-3 gap-4">
                   {subVariants.map(({ variant, label }) => (
-                     <div
-                        key={`${hierarchy}-${variant}`}
-                        className='border p-4 rounded'
-                     >
-                        <h4 className='text-md font-semibold mb-2'>{label}</h4>
-                        <div className='space-y-2'>
-                           <Button
-                              hierarchy={hierarchy}
-                              subVariant={variant}
-                              size='Medium'
-                              leftIcon={({ stroke }) => (
-                                 <RadioUnSelectedIcon className={stroke} />
-                              )}
+                     <div key={`${hierarchy}-${variant}`} className="border p-4 rounded flex flex-col gap-lg">
+                        <h4 className="text-md font-semibold">{label}</h4>
+                        <div className="flex flex-row gap-lg">
+                           <Button onPress={action("Button Pressed")}
+                              hierarchy={hierarchy} subVariant={variant} size="Medium"
                            >
-                              Normal
+                              <Button.Text>Normal</Button.Text>
                            </Button>
-                           <div className='h-2' />
-                           <Button
-                              hierarchy={hierarchy}
-                              subVariant={variant}
-                              size='Medium'
-                              isDisabled
+
+                           <Button onPress={action("Button Pressed")}
+                              isDisabled hierarchy={hierarchy} subVariant={variant} size="Medium"
                            >
-                              Disabled
+                              <Button.Text>Disabled</Button.Text>
                            </Button>
-                           <div className='h-2' />
-                           <Button
-                              hierarchy={hierarchy}
-                              subVariant={variant}
-                              size='Medium'
-                              isLoading
+
+                           <Button onPress={action("Button Pressed")}
+                              hierarchy={hierarchy} subVariant={variant} size="Medium" isLoading
                            >
-                              Loading
+                              <Button.Loader />
+                              <Button.Text>Loading</Button.Text>
                            </Button>
                         </div>
                      </div>
@@ -144,253 +117,157 @@ export const VariantMatrix = () => {
             </div>
          ))}
       </div>
-   )
-}
+   );
+};
 
-/**
- * This story shows all available button sizes.
- */
 export const ButtonSizes = () => {
-   const sizes: ButtonSize[] = [
-      'Small',
-      'Medium',
-      'Large',
-      'ExtraLarge',
-      'DoubleExtraLarge'
-   ]
+   const sizes: ButtonSize[] = ["Small", "Medium", "Large", "ExtraLarge", "DoubleExtraLarge"];
 
    return (
-      <div className='space-y-4'>
-         {sizes.map(size => (
-            <div key={size} className='flex items-center gap-4'>
-               <div className='w-36 text-right'>{size}:</div>
-               <Button
-                  hierarchy={Hierarchy.Primary}
-                  subVariant={SubVariant.Primary}
-                  size={size}
+      <div className="space-y-4">
+         {sizes.map((size) => (
+            <div key={size} className="flex items-center gap-4">
+               <div className="w-36 text-right">{size}:</div>
+               <Button onPress={action("Button Pressed")}
+                  hierarchy={Hierarchy.Primary} subVariant={SubVariant.Primary} size={size}
                >
-                  {size} Button
+                  <Button.Text>{size} Button</Button.Text>
                </Button>
             </div>
          ))}
       </div>
-   )
-}
+   );
+};
 
-/**
- * This story demonstrates buttons with icons in different positions.
- */
 export const ButtonWithIcons = () => {
-   const iconConfigurations = [
-      {
-         leftIcon: true,
-         rightIcon: false,
-         isLoading: false,
-         label: 'Button with Left Icon'
-      },
-      {
-         leftIcon: false,
-         rightIcon: true,
-         isLoading: false,
-         label: 'Button with Right Icon'
-      },
-      {
-         leftIcon: true,
-         rightIcon: true,
-         isLoading: false,
-         label: 'Button With Left And Right Icons'
-      },
-      {
-         leftIcon: true,
-         rightIcon: true,
-         isLoading: true,
-         label: 'Button With Left And Right Icons (Loading)'
-      }
-   ]
+   const configs = [
+      { left: true, right: false, loading: false, label: "Left Icon" },
+      { left: false, right: true, loading: false, label: "Right Icon" },
+      { left: true, right: true, loading: false, label: "Both Icons" },
+      { left: true, right: true, loading: true, label: "Loading + Icons" },
+   ];
 
    return (
-      <div className='space-y-4'>
-         {iconConfigurations.map((config, index) => (
-            <div key={index} className='mb-4'>
-               <Button
-                  hierarchy={Hierarchy.Primary}
-                  subVariant={SubVariant.Primary}
-                  size='Medium'
-                  leftIcon={
-                     config.leftIcon
-                        ? ({ stroke }) => (
-                             <RadioUnSelectedIcon className={stroke} />
-                          )
-                        : undefined
-                  }
-                  rightIcon={
-                     config.rightIcon
-                        ? ({ stroke }) => (
-                             <RadioUnSelectedIcon className={stroke} />
-                          )
-                        : undefined
-                  }
-                  isLoading={config.isLoading}
-               >
-                  {config.label}
-               </Button>
-            </div>
+      <div className="flex flex-row gap-lg">
+         {configs.map((cfg, i) => (
+            <Button key={i} hierarchy={Hierarchy.Primary} subVariant={SubVariant.Primary} size="Medium" isLoading={cfg.loading}>
+               {cfg.left && <Button.ButtonLeftIcon render={(c) => <RadioUnSelectedIcon className={c.stroke} />} />}
+               <Button.Text>{cfg.label}</Button.Text>
+               {cfg.right && <Button.ButtonRightIcon render={(c) => <RadioUnSelectedIcon className={c.stroke} />} />}
+               {cfg.loading && <Button.Loader />}
+            </Button>
          ))}
       </div>
-   )
-}
+   );
+};
 
-/**
- * This story showcases icon-only buttons across different hierarchies.
- */
 export const IconOnlyButtons = () => {
    const hierarchies = [
-      {
-         hierarchy: Hierarchy.Primary,
-         subVariant: SubVariant.Primary,
-         label: 'Primary'
-      },
-      {
-         hierarchy: Hierarchy.Secondary,
-         subVariant: SubVariant.GrayOutline,
-         label: 'Secondary Gray'
-      },
-      {
-         hierarchy: Hierarchy.Tertiary,
-         subVariant: SubVariant.Gray,
-         label: 'Tertiary Gray'
-      }
-   ]
+      { hierarchy: Hierarchy.Primary, subVariant: SubVariant.Primary, label: "Primary" },
+      { hierarchy: Hierarchy.Secondary, subVariant: SubVariant.GrayOutline, label: "Secondary Gray" },
+      { hierarchy: Hierarchy.Tertiary, subVariant: SubVariant.Gray, label: "Tertiary Gray" },
+      { hierarchy: Hierarchy.Link, subVariant: SubVariant.Primary, label: "Link Primary" }
+   ];
 
-   const sizes: ButtonSize[] = ['Small', 'Medium', 'Large']
-   const sizeClassMap = {
-      Small: 'px-md py-md',
-      Medium: 'px-[10px] py-[10px]',
-      Large: 'px-lg py-lg'
-   }
+   const sizes: ButtonSize[] = ["Small", "Medium", "Large"];
 
    return (
-      <div className='space-y-8'>
+      <div className="space-y-8">
          {hierarchies.map(({ hierarchy, subVariant, label }) => (
-            <div key={`${hierarchy}-${subVariant}`} className='mb-4'>
-               <h3 className='text-md font-semibold mb-2'>{label}</h3>
-               <div className='flex gap-4'>
-                  {sizes.map(size => (
-                     <Button
-                        key={`${hierarchy}-${subVariant}-${size}`}
-                        hierarchy={hierarchy}
-                        subVariant={subVariant}
-                        size={size}
-                        className={sizeClassMap[size]}
+            <div key={`${hierarchy}-${subVariant}`} >
+               <h3 className="text-md font-semibold mb-2">{label}</h3>
+               <div className="flex gap-4">
+                  {sizes.map((size) => (
+                     <Button key={`${hierarchy}-${subVariant}-${size}`}
+                        onPress={action("Button Pressed")}
+                        hierarchy={hierarchy} subVariant={subVariant} size={size}
                      >
-                        <RadioUnSelectedIcon className='stroke-button-secondary-fg' />
+                        <Button.ButtonLeftIcon render={(c) => <RadioUnSelectedIcon className={c.stroke} />} />
                      </Button>
                   ))}
                </div>
             </div>
          ))}
       </div>
-   )
-}
+   );
+};
 
-/**
- * This story demonstrates different loading states of buttons.
- */
 export const LoadingStates = () => (
-   <div className='space-y-8'>
-      <div className='space-y-4'>
-         <h3 className='text-md font-semibold'>Normal Loading</h3>
-         <Button
-            hierarchy={Hierarchy.Primary}
-            subVariant={SubVariant.Primary}
-            size='Medium'
-            isLoading
+   <div className="space-y-8">
+      <div>
+         <h3 className="text-md font-semibold">Normal Loading</h3>
+         <Button onPress={action("Button Pressed")}
+            hierarchy={Hierarchy.Primary} subVariant={SubVariant.Primary} size="Medium" isLoading
          >
-            Loading Button
+            <Button.Loader />
+            <Button.Text>Loading Button</Button.Text>
          </Button>
       </div>
 
-      <div className='space-y-4'>
-         <h3 className='text-md font-semibold'>Shrink While Loading</h3>
-         <Button
-            hierarchy={Hierarchy.Primary}
-            subVariant={SubVariant.Primary}
-            size='Medium'
+      <div>
+         <h3 className="text-md font-semibold">Shrink While Loading</h3>
+         <Button onPress={action("Button Pressed")}
+            hierarchy={Hierarchy.Tertiary} subVariant={SubVariant.Gray} size="Medium"
             isLoading
-            shouldShrinkButtonWhileLoading
          >
-            Loading Button
+            <Button.Loader />
+            <Button.Text>Loading Button</Button.Text>
          </Button>
       </div>
 
-      <div className='space-y-4'>
-         <h3 className='text-md font-semibold'>Loading with Icons</h3>
-         <Button
-            hierarchy={Hierarchy.Primary}
-            subVariant={SubVariant.Primary}
-            size='Medium'
+      <div>
+         <h3 className="text-md font-semibold">Loading with Icons</h3>
+         <Button onPress={action("Button Pressed")}
+            hierarchy={Hierarchy.Primary} subVariant={SubVariant.Destructive} size="Medium"
             isLoading
-            leftIcon={({ stroke }) => (
-               <RadioUnSelectedIcon className={stroke} />
-            )}
-            rightIcon={({ stroke }) => (
-               <RadioUnSelectedIcon className={stroke} />
-            )}
          >
-            Loading with Icons
+            <Button.ButtonLeftIcon render={(c) => <RadioUnSelectedIcon className={c.stroke} />} />
+            <Button.Text>Loading with Icons</Button.Text>
+            <Button.ButtonRightIcon render={(c) => <RadioUnSelectedIcon className={c.stroke} />} />
+            <Button.Loader />
          </Button>
       </div>
    </div>
-)
+);
 
-/**
- * This story showcases link buttons in different variants and states.
- */
 export const LinkButtons = () => {
    const variants = [
-      {
-         subVariant: SubVariant.Gray,
-         size: 'Small' as ButtonSize,
-         label: 'Link Gray Button'
-      },
-      {
-         subVariant: SubVariant.Primary,
-         size: 'Small' as ButtonSize,
-         label: 'Link Primary Button'
-      },
-      {
-         subVariant: SubVariant.Destructive,
-         size: 'Small' as ButtonSize,
-         label: 'Link Destructive Button'
-      }
-   ]
+      { subVariant: SubVariant.Gray, label: "Gray" },
+      { subVariant: SubVariant.Primary, label: "Primary" },
+      { subVariant: SubVariant.Destructive, label: "Destructive" },
+   ];
 
    const states = [
-      { state: {}, label: 'Normal' },
-      { state: { isLoading: true }, label: 'Loading' },
-      { state: { isDisabled: true }, label: 'Disabled' }
-   ]
+      { label: "Normal" },
+      { label: "Loading", loading: true },
+      { label: "Disabled", disabled: true },
+   ];
 
    return (
-      <div className='space-y-8'>
-         {variants.map(({ subVariant, size, label }) => (
-            <div key={subVariant} className='mb-4'>
-               <h3 className='text-md font-semibold mb-2'>{label}</h3>
-               <div className='flex gap-4'>
-                  {states.map((state, index) => (
+      <div className="space-y-8">
+         {variants.map(({ subVariant, label }) => (
+            <div key={subVariant}>
+               <h3>{label}</h3>
+               <div className="flex gap-4">
+                  {states.map((state, idx) => (
                      <Button
-                        key={index}
+                        key={idx}
                         hierarchy={Hierarchy.Link}
                         subVariant={subVariant}
-                        size={size}
-                        {...state.state}
+                        size="Small"
+                        onPress={action("Button Pressed")}
+                        isDisabled={state.disabled}
+                        isLoading={state.loading}
                      >
-                        {label} ({state.label})
+                        <Button.Text>
+                           {label} ({state.label})
+                        </Button.Text>
+                        {state.loading && <Button.Loader />}
                      </Button>
                   ))}
                </div>
             </div>
          ))}
       </div>
-   )
-}
+   );
+};

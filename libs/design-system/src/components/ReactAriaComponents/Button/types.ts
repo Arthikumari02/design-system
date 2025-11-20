@@ -28,7 +28,7 @@ export interface IconColors {
    stroke: string
 }
 
-interface SubVariantsThemeType {
+export interface SubVariantsThemeType {
    loaderColor: string
    default: {
       bgColor: string
@@ -60,7 +60,7 @@ interface SubVariantsThemeType {
    }
 }
 
-interface HierarchyThemesType {
+export interface HierarchyThemesType {
    [key: string]: SubVariantsThemeType
 }
 

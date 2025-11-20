@@ -1,126 +1,96 @@
-import cn from 'classnames'
-import React, { forwardRef } from 'react'
-import { Button as AriaButton } from 'react-aria-components'
-import type { ButtonProps as AriaButtonProps } from 'react-aria-components'
+import cn from 'classnames';
+import React, { forwardRef } from 'react';
+import { Button as AriaButton } from 'react-aria-components';
+import type { ButtonProps as AriaButtonProps } from 'react-aria-components';
 
-import { Hierarchy, SubVariant } from '../../../types/ButtonTypes'
-import { ButtonSize, FocusRingVariant } from '../../../types'
-import { ButtonContent } from './ButtonContent'
-import { buttonSizes } from './sizes'
-import { getButtonStyles } from './styles'
-import { ButtonStyles, ButtonIconColors } from './types'
+import { Hierarchy, SubVariant } from '../../../types/ButtonTypes';
+import { ButtonSize } from '../../../types';
+import { ButtonContent } from './ButtonContent';
+import { buttonSizes } from './sizes';
+import { getButtonStyles } from './styles';
+import { ButtonContext } from './ButtonContext';
 
-export interface ButtonProps extends AriaButtonProps {
-   hierarchy: Hierarchy
-   size: ButtonSize
-   subVariant: SubVariant
-   children: any
-   autoFocus?: boolean
-   buttonContentClassName?: string
-   childrenContainerClassName?: string
-   className?: string
-   id?: string
-   isDisabled?: boolean
-   isLoading?: boolean
-   ref?: React.ForwardedRef<HTMLButtonElement>
-   shouldShrinkButtonWhileLoading?: boolean
-   leftIcon?: (iconColors: ButtonIconColors) => React.ReactNode
-   rightIcon?: (iconColors: ButtonIconColors) => React.ReactNode
-   onClick?: (_: any) => void
-   shouldPassEventPropagation?: boolean
-   buttonFocusRingVariant?: FocusRingVariant
+import { ButtonLeftIcon, ButtonRightIcon } from './ButtonIcons';
+import { ButtonText } from './ButtonText';
+import { ButtonLoader } from './ButtonLoader';
+
+export interface ButtonProps extends Omit<AriaButtonProps, 'isDisabled'> {
+   hierarchy?: Hierarchy;
+   size?: ButtonSize;
+   subVariant?: SubVariant;
+   isDisabled?: boolean;
+   isLoading?: boolean;
+   shouldShrinkButtonWhileLoading?: boolean;
+   children?: React.ReactNode;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const ButtonBase = forwardRef<HTMLButtonElement, ButtonProps>(
    (
       {
          hierarchy = Hierarchy.Primary,
          size = 'Medium',
          subVariant = SubVariant.Primary,
-         buttonFocusRingVariant,
-         autoFocus = false,
-         buttonContentClassName,
-         childrenContainerClassName,
-         className = '',
-         id,
          isDisabled = false,
          isLoading = false,
          shouldShrinkButtonWhileLoading = false,
-         shouldPassEventPropagation = false,
-         leftIcon,
-         onClick,
-         rightIcon,
          children,
+         className,
          ...others
-      }: ButtonProps,
+      },
       forwardedRef
    ) => {
-      const isButtonDisabled = isDisabled || isLoading
-      const sizedTheme = buttonSizes[size]
-      const isLinkButton = hierarchy === Hierarchy.Link
+      const sizedTheme = buttonSizes[size];
+      const isLink = hierarchy === Hierarchy.Link;
 
       return (
          <AriaButton
             {...others}
             ref={forwardedRef}
-            id={id}
-            autoFocus={autoFocus}
-            isDisabled={isButtonDisabled}
-            onPress={onClick}
-            // @ts-ignore
-            shouldPassEventPropagation={shouldPassEventPropagation}
+            isDisabled={isDisabled || isLoading}
+            aria-busy={isLoading}
             className={cn(className, 'outline-none')}
          >
-            {({ isHovered, isPressed, isFocused }) => {
-               const {
-                  bgColor,
-                  textColor,
-                  border,
-                  loaderColor,
-                  focusRingVariant,
-                  iconColors
-               }: ButtonStyles = getButtonStyles({
+            {({ isHovered, isPressed, isFocused, isPending }) => {
+               const loading = isLoading || isPending;
+
+               const styles = getButtonStyles({
                   isHovered,
                   isPressed: isPressed || isFocused,
-                  isDisabled: isButtonDisabled,
+                  isDisabled: isDisabled || loading,
                   hierarchy,
                   subVariant,
-                  isLoading
-               })
+                  isLoading: loading,
+               });
 
                return (
-                  <ButtonContent
-                     {...{
-                        isLoading,
-                        shouldShrinkButtonWhileLoading,
-                        leftIcon,
-                        rightIcon,
-                        children,
-                        iconColors,
-                        loaderColor,
+                  <ButtonContext.Provider
+                     value={{
+                        ...styles,
                         sizedTheme,
-                        childrenContainerClassName,
-                        bgColor,
-                        textColor,
-                        border,
-                        isButtonDisabled,
-                        isLinkButton,
-                        buttonContentClassName
+                        isLoading: loading,
+                        isDisabled,
+                        shouldShrinkButtonWhileLoading,
+                        isLink,
                      }}
-                     isFocused={isFocused}
-                     within
-                     variant={
-                        buttonFocusRingVariant
-                           ? buttonFocusRingVariant
-                           : focusRingVariant
-                     }
-                     size={size}
-                  />
-               )
+                  >
+                     <ButtonContent isFocused={isFocused} variant={styles.focusRingVariant}>
+                        {children}
+                     </ButtonContent>
+                  </ButtonContext.Provider>
+               );
             }}
          </AriaButton>
-      )
+      );
    }
-)
+);
 
-Button.displayName = 'Button'
+ButtonBase.displayName = 'Button';
+
+export const Button = Object.assign(ButtonBase, {
+   ButtonLeftIcon,
+   ButtonRightIcon,
+   Text: ButtonText,
+   Loader: ButtonLoader,
+});
+
+export default Button;

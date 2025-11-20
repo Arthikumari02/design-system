@@ -1,106 +1,48 @@
-import cn from 'classnames'
-import React from 'react'
+import cn from 'classnames';
+import React from 'react';
+import { withFocusRing, FocusRingProps } from '../WithFocusRing/WithFocusRing';
+import { useButtonContext } from './ButtonContext';
 
-import { Loader } from '../../Loader/Loader'
-import { withFocusRing, FocusRingProps } from '../WithFocusRing/WithFocusRing'
-import { ButtonIconColors } from './types'
-
-interface ButtonContentProps extends FocusRingProps {
-   isLoading: boolean
-   shouldShrinkButtonWhileLoading: boolean
-   leftIcon?: (iconColors: ButtonIconColors) => React.ReactNode
-   rightIcon?: (iconColors: ButtonIconColors) => React.ReactNode
-   children: React.ReactNode
-   iconColors: ButtonIconColors
-   loaderColor: string
-   sizedTheme: any
-   buttonContentClassName?: string
-   childrenContainerClassName?: string
-   className?: string
-   bgColor: string
-   textColor: string
-   border: string
-   isButtonDisabled: boolean
-   isLinkButton: boolean
+export interface ButtonContentProps extends Omit<FocusRingProps, 'variant'> {
+   children: React.ReactNode;
+   className?: string;
+   isFocused: boolean;
 }
 
-const ButtonContentBase = ({
-   isLoading,
-   shouldShrinkButtonWhileLoading,
-   leftIcon,
-   rightIcon,
-   children,
-   iconColors,
-   loaderColor,
-   sizedTheme,
-   buttonContentClassName,
-   childrenContainerClassName,
-   className,
-   bgColor,
-   textColor,
-   border,
-   isButtonDisabled,
-   isLinkButton
-}: ButtonContentProps): React.ReactElement => {
-   const renderContent = () => {
-      const content = (
-         <div
-            className={cn('flex items-center', childrenContainerClassName, {
-               'text-transparent !invisible':
-                  isLoading && !shouldShrinkButtonWhileLoading
-            })}
-         >
-            {leftIcon && (
-               <div className={cn(sizedTheme.leftIconMargin)}>
-                  {leftIcon(iconColors)}
-               </div>
-            )}
-            {children}
-            {rightIcon && (
-               <div className={cn(sizedTheme.rightIconMargin)}>
-                  {rightIcon(iconColors)}
-               </div>
-            )}
-         </div>
-      )
+const ButtonContentBase = ({ children, className }: ButtonContentProps) => {
+   const {
+      bgColor,
+      textColor,
+      border,
+      sizedTheme,
+      isLink,
+      isLoading,
+      shouldShrinkButtonWhileLoading,
+      isDisabled,
+   } = useButtonContext();
 
-      if (isLoading) {
-         if (shouldShrinkButtonWhileLoading) {
-            return <Loader className={loaderColor} />
-         }
-         return (
-            <>
-               <Loader className={cn(loaderColor, 'absolute')} />
-               {content}
-            </>
-         )
-      }
-
-      return content
-   }
+   const isButtonDisabled = isDisabled || isLoading;
 
    return (
       <div
          className={cn(
-            {
-               'cursor-not-allowed': isButtonDisabled,
-               relative: !shouldShrinkButtonWhileLoading
-            },
             'flex justify-center items-center outline-none',
+            !shouldShrinkButtonWhileLoading && 'relative',
             bgColor,
             textColor,
             border,
             sizedTheme.typography,
             sizedTheme.borderRadius,
-            { 'px-0 py-0': isLinkButton },
-            { [sizedTheme.padding]: !isLinkButton },
-            className,
-            buttonContentClassName
+            isLink ? 'px-0 py-0' : sizedTheme.padding,
+            isButtonDisabled && 'cursor-not-allowed',
+            className
          )}
       >
-         {renderContent()}
+         <div className={`flex items-center ${sizedTheme.gap}`}>
+            {children}
+         </div>
       </div>
-   )
-}
+   );
+};
 
-export const ButtonContent = withFocusRing(ButtonContentBase)
+export const ButtonContent = withFocusRing(ButtonContentBase);
