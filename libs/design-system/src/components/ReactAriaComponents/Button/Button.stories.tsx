@@ -18,7 +18,6 @@ export default {
          options: ["ExtraSmall", "Small", "Medium", "Large", "ExtraLarge", "DoubleExtraLarge"],
       },
       isDisabled: { control: "boolean" },
-      isLoading: { control: "boolean" },
       shouldShrinkButtonWhileLoading: { control: "boolean" },
       children: { control: "text" },
    },
@@ -30,7 +29,7 @@ const Template: StoryFn<typeof Button> = (args) => (
    >
       <Button.ButtonLeftIcon render={(c) => <UserIcon className={c.stroke} />} />
       <Button.Text>{args.children}</Button.Text>
-      {args.isLoading && <Button.Loader />}
+      {args.shouldShrinkButtonWhileLoading && <Button.Loader />}
    </Button>
 );
 
@@ -105,7 +104,7 @@ export const VariantMatrix = () => {
                            </Button>
 
                            <Button onPress={action("Button Pressed")}
-                              hierarchy={hierarchy} subVariant={variant} size="Medium" isLoading
+                              hierarchy={hierarchy} subVariant={variant} size="Medium"
                            >
                               <Button.Loader />
                               <Button.Text>Loading</Button.Text>
@@ -150,7 +149,7 @@ export const ButtonWithIcons = () => {
    return (
       <div className="flex flex-row gap-lg">
          {configs.map((cfg, i) => (
-            <Button key={i} hierarchy={Hierarchy.Primary} subVariant={SubVariant.Primary} size="Medium" isLoading={cfg.loading}>
+            <Button key={i} hierarchy={Hierarchy.Primary} subVariant={SubVariant.Primary} size="Medium" shouldShrinkButtonWhileLoading={cfg.loading}>
                {cfg.left && <Button.ButtonLeftIcon render={(c) => <RadioUnSelectedIcon className={c.stroke} />} />}
                <Button.Text>{cfg.label}</Button.Text>
                {cfg.right && <Button.ButtonRightIcon render={(c) => <RadioUnSelectedIcon className={c.stroke} />} />}
@@ -197,7 +196,7 @@ export const LoadingStates = () => (
       <div>
          <h3 className="text-md font-semibold">Normal Loading</h3>
          <Button onPress={action("Button Pressed")}
-            hierarchy={Hierarchy.Primary} subVariant={SubVariant.Primary} size="Medium" isLoading
+            hierarchy={Hierarchy.Primary} subVariant={SubVariant.Primary} size="Medium"
          >
             <Button.Loader />
             <Button.Text>Loading Button</Button.Text>
@@ -208,7 +207,6 @@ export const LoadingStates = () => (
          <h3 className="text-md font-semibold">Shrink While Loading</h3>
          <Button onPress={action("Button Pressed")}
             hierarchy={Hierarchy.Tertiary} subVariant={SubVariant.Gray} size="Medium"
-            isLoading
          >
             <Button.Loader />
             <Button.Text>Loading Button</Button.Text>
@@ -219,12 +217,12 @@ export const LoadingStates = () => (
          <h3 className="text-md font-semibold">Loading with Icons</h3>
          <Button onPress={action("Button Pressed")}
             hierarchy={Hierarchy.Primary} subVariant={SubVariant.Destructive} size="Medium"
-            isLoading
+            shouldShrinkButtonWhileLoading
          >
             <Button.ButtonLeftIcon render={(c) => <RadioUnSelectedIcon className={c.stroke} />} />
             <Button.Text>Loading with Icons</Button.Text>
-            <Button.ButtonRightIcon render={(c) => <RadioUnSelectedIcon className={c.stroke} />} />
             <Button.Loader />
+            <Button.ButtonRightIcon render={(c) => <RadioUnSelectedIcon className={c.stroke} />} />
          </Button>
       </div>
    </div>
@@ -257,7 +255,7 @@ export const LinkButtons = () => {
                         size="Small"
                         onPress={action("Button Pressed")}
                         isDisabled={state.disabled}
-                        isLoading={state.loading}
+                        shouldShrinkButtonWhileLoading={state.loading}
                      >
                         <Button.Text>
                            {label} ({state.label})

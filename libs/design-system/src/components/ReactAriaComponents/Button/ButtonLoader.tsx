@@ -11,7 +11,7 @@ export const ButtonLoader: React.FC = () => {
         <span
             className={cn(
                 'flex items-center justify-center',
-                shouldShrinkButtonWhileLoading ? 'mr-2' : 'absolute inset-0'
+                shouldShrinkButtonWhileLoading ? 'mr-0' : 'absolute inset-0'
             )}
         >
             <Loader className={loaderColor} />

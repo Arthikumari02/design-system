@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { Button as AriaButton } from 'react-aria-components';
 import type { ButtonProps as AriaButtonProps } from 'react-aria-components';
 
@@ -19,7 +19,6 @@ export interface ButtonProps extends Omit<AriaButtonProps, 'isDisabled'> {
    size?: ButtonSize;
    subVariant?: SubVariant;
    isDisabled?: boolean;
-   isLoading?: boolean;
    shouldShrinkButtonWhileLoading?: boolean;
    children?: React.ReactNode;
 }
@@ -31,7 +30,6 @@ export const ButtonBase = forwardRef<HTMLButtonElement, ButtonProps>(
          size = 'Medium',
          subVariant = SubVariant.Primary,
          isDisabled = false,
-         isLoading = false,
          shouldShrinkButtonWhileLoading = false,
          children,
          className,
@@ -42,16 +40,26 @@ export const ButtonBase = forwardRef<HTMLButtonElement, ButtonProps>(
       const sizedTheme = buttonSizes[size];
       const isLink = hierarchy === Hierarchy.Link;
 
+      const hasLoader = useMemo(() => {
+         let foundLoader = false;
+         React.Children.forEach(children, (child) => {
+            if (React.isValidElement(child) && child.type === ButtonLoader) {
+               foundLoader = true;
+            }
+         });
+         return foundLoader;
+      }, [children]);
+
       return (
          <AriaButton
             {...others}
             ref={forwardedRef}
-            isDisabled={isDisabled || isLoading}
-            aria-busy={isLoading}
+            isDisabled={isDisabled || hasLoader}
+            aria-busy={hasLoader}
             className={cn(className, 'outline-none')}
          >
             {({ isHovered, isPressed, isFocused, isPending }) => {
-               const loading = isLoading || isPending;
+               const loading = hasLoader || isPending;
 
                const styles = getButtonStyles({
                   isHovered,
