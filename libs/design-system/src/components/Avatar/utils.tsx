@@ -1,7 +1,7 @@
 import { AvatarGroupSize, AvatarLabelSize, AvatarSize } from '../../types'
 
 import { EMPTY_STRING, SPECIAL_CHARS_REGEX } from './constants'
-import { AvatarShape } from './types'
+import { AvatarShape, AvatarStatusType } from './types'
 
 export const getAvatarSize = (size: AvatarSize): string => {
    switch (size) {
@@ -48,23 +48,38 @@ export const getUserIconSize = (size: AvatarSize): number => {
 export const getStatusIndicationSize = (size: AvatarSize): string => {
    switch (size) {
       case 'DoubleExtraSmall':
-         return 'w-1 h-1 box-content bg-fg-success-secondary rounded-full border border-2 border-button-primary-fg'
+         return 'w-1 h-1 box-content rounded-full border-2'
       case 'ExtraSmall':
-         return 'w-1.5 h-1.5 box-content bg-fg-success-secondary rounded-full border border-2 border-button-primary-fg'
+         return 'w-1.5 h-1.5 box-content rounded-full border-2'
       case 'Small':
-         return 'w-2 h-2 box-content bg-fg-success-secondary rounded-full border border-2 border-button-primary-fg'
+         return 'w-2 h-2 box-content rounded-full border-2'
       case 'Medium':
-         return 'w-2.5 h-2.5 box-content bg-fg-success-secondary rounded-full border border-2 border-button-primary-fg'
+         return 'w-2.5 h-2.5 box-content rounded-full border-2'
       case 'Large':
-         return 'w-3 h-3 box-content bg-fg-success-secondary rounded-full border border-2 border-button-primary-fg'
+         return 'w-3 h-3 box-content rounded-full border-2'
       case 'ExtraLarge':
-         return 'w-3.5 h-3.5 box-content bg-fg-success-secondary rounded-full border border-2 border-button-primary-fg'
+         return 'w-3.5 h-3.5 box-content rounded-full border-2'
       case 'DoubleExtraLarge':
-         return 'w-4 h-4 box-content bg-fg-success-secondary rounded-full  border border-2 border-button-primary-fg '
+         return 'w-4 h-4 box-content rounded-full border-2'
       case 'TrebleExtraLarge':
-         return 'w-4.5 h-4.5 box-content bg-fg-success-secondary rounded-full  border border-2 border-button-primary-fg '
+         return 'w-4.5 h-4.5 box-content rounded-full border-2'
    }
 }
+
+
+export const getStatusStyles = (type: AvatarStatusType) => {
+   switch (type) {
+      case "online":
+         return "bg-fg-success-secondary border-button-primary-fg";
+      case "verified":
+         return "bg-blue-500 border-button-primary-fg";
+      case "company":
+         return "bg-gray-200 border-button-primary-fg";
+      default:
+         return "";
+   }
+};
+
 
 export const getFontSize = (size: AvatarSize): string => {
    switch (size) {
@@ -108,7 +123,7 @@ export const getBorderRadius = (size: AvatarSize): string => {
 
 export const getAvatarShape = (
    size: AvatarSize,
-   variant: AvatarShape
+   variant: AvatarShape = 'Circular'
 ): string => {
    switch (variant) {
       case 'Hexagon':
@@ -116,6 +131,7 @@ export const getAvatarShape = (
       case 'Rounded':
          return getBorderRadius(size)
       case 'Circular':
+      default:
          return 'rounded-full'
    }
 }
@@ -167,9 +183,9 @@ export const getLeftMargin = (size: AvatarSize, zIndex: number): string => {
       case 'Small':
          return `-ml-[10px]`
       case 'Medium':
-         return `-ml-xl`
+         return `-ml-lg`
       case 'Large':
-         return `-ml-xl`
+         return `-ml-lg`
 
       case 'ExtraLarge':
          return `-ml-[22px]`
@@ -221,18 +237,17 @@ export const getAvatarDescriptionStyles = (size: AvatarSize): string => {
 export const getAvatarLabelMargins = (size: AvatarSize): string => {
    switch (size) {
       case 'DoubleExtraSmall':
-         return 'ml-[10px]'
+         return 'ml-[8px]'
       case 'Small':
          return 'ml-[10px]'
-
       case 'Medium':
-         return 'ml-[10px]'
+         return 'ml-[12px]'
       case 'Large':
-         return 'ml-lg'
+         return 'ml-[14px]'
       case 'ExtraLarge':
-         return 'ml-[lg]'
+         return 'ml-[14px]'
       case 'DoubleExtraLarge':
-         return 'ml-xl'
+         return 'ml-[14px]'
    }
    return ''
 }

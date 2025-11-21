@@ -1,18 +1,21 @@
-import cn from 'classnames'
+import cn from "classnames";
 
 export const avatarGroupContainerClassName = cn(
-   'relative flex flex-row justify-start items-center'
-)
+   "flex items-center relative"
+);
 
 export const avatarWrapperClassName = cn(
-   'relative flex flex-row justify-start items-center p-xxs bg-primary'
-)
+   "relative border-2 border-white shadow-sm"
+);
 
 export const avatarCountContainerClassName = cn(
-   `flex justify-center items-center `
-)
+   "bg-[#F2F4F7] flex items-center justify-center border border-gray-300"
+);
 
-export const avatarCounterWrapper = cn('p-xxs bg-primary z-l1')
-export const avatarCountTextClassName = cn(`text-tertiary-600 font-medium`)
+export const avatarCountTextClassName = cn(
+   "text-gray-600 font-semibold"
+);
 
-export const avatarFocusClassName = cn(`bg-primary-100`)
+export const addButtonClassName = cn(
+   "border-2 border-dashed border-gray-300 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-50"
+);

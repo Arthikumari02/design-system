@@ -4,6 +4,8 @@ export type AvatarType = 'Image' | 'Icon' | 'Text'
 
 export type AvatarShape = 'Circular' | 'Rounded' | 'Hexagon'
 
+export type AvatarStatusType = "online" | "verified" | "company";
+
 export interface AvatarDetails {
    name: string
 

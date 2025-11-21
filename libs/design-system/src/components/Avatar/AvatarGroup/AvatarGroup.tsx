@@ -1,188 +1,89 @@
-import cn from 'classnames'
-import { observer } from 'mobx-react'
-import React, { ReactElement, useMemo, useRef } from 'react'
-import { PlacesType, Tooltip } from 'react-tooltip'
-import uuidV4 from 'react-uuid'
-
-import { useFocusRing } from '@react-aria/focus'
-
-import { AvatarGroupSize } from '../../../types'
-
-import { Avatar } from '../Avatar'
-import '../Avatar.css'
-import { AvatarDetails, AvatarShape, AvatarType } from '../types'
+import cn from "classnames";
+import Avatar from "../Avatar";
+import { AvatarDetails, AvatarShape } from "../types";
+import { AvatarGroupSize } from "../../../types";
 import {
    getAvatarGroupSize,
    getAvatarShape,
+   getLeftMargin,
    getAvatarSize,
    getFontSize,
-   getLeftMargin
-} from '../utils'
-
+} from "../utils";
 import {
-   avatarCountContainerClassName,
-   avatarCounterWrapper,
-   avatarCountTextClassName,
-   avatarFocusClassName,
    avatarGroupContainerClassName,
-   avatarWrapperClassName
-} from './styles'
+   avatarWrapperClassName,
+   avatarCountContainerClassName,
+   avatarCountTextClassName,
+   addButtonClassName,
+} from "./styles";
+
 export interface AvatarGroupProps {
-   type: AvatarType
-   shape: AvatarShape
-   size: AvatarGroupSize
-   maxDisplayCount: number
-   children?: ReactElement
-   avatars: AvatarDetails[]
-   showStatus?: boolean
-   usersListToolTipClassName?: string
-   tooltipPlacement?: PlacesType
-   shouldShowTooltip?: boolean
-   className?: string
+   avatars: AvatarDetails[];
+   size: AvatarGroupSize;
+   shape: AvatarShape;
+   maxDisplayCount: number;
+   onAddClick?: () => void;
+   className?: string;
 }
 
-const AvatarGroup = observer((props: AvatarGroupProps) => {
-   const {
-      type,
-      shape,
-      size,
-      maxDisplayCount,
-      children,
-      avatars,
-      showStatus,
-      usersListToolTipClassName,
-      tooltipPlacement = 'top',
-      shouldShowTooltip = true,
-      className
-   } = props
-
-   const { isFocused, focusProps } = useFocusRing({
-      within: true
-   })
-   let counterZIndex = 0
-   const tooltipIdRef = useRef(uuidV4())
-
-   const avatarSize = useMemo(() => getAvatarGroupSize(size), [size])
-
-   const renderCount = (remainingAvatarsCount: number): React.ReactElement => (
-      <span
-         className={`${cn(avatarCountTextClassName)} ${getFontSize(avatarSize)}`}
-      >{`+${remainingAvatarsCount}`}</span>
-   )
-
-   const customTooltip = (): React.ReactElement => (
-      <div className={'w-[200px] break-words'}>
-         {avatars.map((item, index) => {
-            const isLastItem = index === avatars.length - 1
-
-            return (
-               <span key={uuidV4()}>
-                  {item.name}
-                  {isLastItem ? null : ', '}
-               </span>
-            )
-         })}
-      </div>
-   )
-
-   const renderRemainingAvailableAvatarsCount =
-      (): React.ReactElement | null => {
-         const remainingAvatarsCount = avatars.length - maxDisplayCount
-         const shouldDisplayRemainingAvatarsCount = remainingAvatarsCount > 0
-
-         if (shouldDisplayRemainingAvatarsCount) {
-            const zIndex = counterZIndex + 1
-
-            return (
-               <div
-                  className={cn(
-                     getAvatarShape(avatarSize, shape),
-                     getLeftMargin(avatarSize, zIndex),
-                     cn(avatarCounterWrapper)
-                  )}
-               >
-                  <div
-                     className={`
-               ${'bg-tertiary'}  
-               ${getAvatarShape(avatarSize, shape)} 
-               ${getAvatarSize(avatarSize)}
-               ${cn(avatarCountContainerClassName)}
-               `}
-                     data-tooltip-id={tooltipIdRef.current}
-                     data-tooltip-position-strategy='fixed'
-                  >
-                     {renderCount(remainingAvatarsCount)}
-                  </div>
-                  {shouldShowTooltip ? (
-                     <Tooltip
-                        id={tooltipIdRef.current}
-                        classNameArrow={'bg-gray-slate-900'}
-                        className={`rounded-md !z-l10 ${usersListToolTipClassName}`}
-                        place={tooltipPlacement}
-                     >
-                        {customTooltip()}
-                     </Tooltip>
-                  ) : null}
-               </div>
-            )
-         }
-         return null
-      }
-
-   const renderAvatar = (
-      avatarDetails: AvatarDetails,
-      zIndex: number,
-      childrenPosition: number
-   ): ReactElement => {
-      const { name, imageURL, userIcon } = avatarDetails
-      const isFirstChild = childrenPosition === 0
-      return (
-         <div
-            key={uuidV4()}
-            className={`
-            ${getAvatarShape(avatarSize, shape)}
-            ${isFirstChild ? '' : getLeftMargin(avatarSize, zIndex)} 
-            ${cn(isFirstChild ? '' : avatarWrapperClassName)}
-            ${cn(isFocused ? avatarFocusClassName : '')}
-            `}
-            {...focusProps}
-         >
-            <Avatar
-               name={name}
-               type={avatarDetails.avatarType ? avatarDetails.avatarType : type}
-               shape={shape}
-               size={avatarSize}
-               imageURL={imageURL && imageURL}
-               userIcon={userIcon && userIcon}
-               showStatus={showStatus && showStatus}
-            />
-         </div>
-      )
-   }
-
-   const getAvatarZIndex = (index: number): number => {
-      const zIndex = index
-      counterZIndex = zIndex + 1
-      return zIndex
-   }
-
-   const renderAvatars = (): ReactElement[] => {
-      const numberOfMaximumAvatarsToBeDisplayed: AvatarDetails[] =
-         avatars.slice(0, maxDisplayCount)
-
-      return numberOfMaximumAvatarsToBeDisplayed.map(
-         (avatarDetails: AvatarDetails, index: number) =>
-            renderAvatar(avatarDetails, getAvatarZIndex(index), index)
-      )
-   }
+export const AvatarGroup = ({
+   avatars,
+   size,
+   shape,
+   maxDisplayCount,
+   onAddClick,
+   className,
+}: AvatarGroupProps) => {
+   const avatarSize = getAvatarGroupSize(size);
 
    return (
       <div className={cn(avatarGroupContainerClassName, className)}>
-         {renderAvatars()}
-         {renderRemainingAvailableAvatarsCount()}
-         {children ? children : null}
-      </div>
-   )
-})
+         {avatars.slice(0, maxDisplayCount).map((item, index) => (
+            <div
+               key={index}
+               className={cn(
+                  avatarWrapperClassName,
+                  getAvatarShape(avatarSize, shape),
+                  getAvatarSize(avatarSize),
+                  index > 0 && getLeftMargin(avatarSize, index)
+               )}
+            >
+               <Avatar.Root name={item.name} size={avatarSize} shape={shape}>
+                  {item.imageURL ? <Avatar.Image src={item.imageURL} /> : <Avatar.Text />}
+               </Avatar.Root>
+            </div>
+         ))}
 
-export { AvatarGroup }
+         {avatars.length > maxDisplayCount && (
+            <div
+               className={cn(
+                  avatarWrapperClassName,
+                  avatarCountContainerClassName,
+                  getAvatarShape(avatarSize, shape),
+                  getAvatarSize(avatarSize),
+                  getLeftMargin(avatarSize, maxDisplayCount)
+               )}
+            >
+               <span className={cn(avatarCountTextClassName, getFontSize(avatarSize))}>
+                  +{avatars.length - maxDisplayCount}
+               </span>
+            </div>
+         )}
+
+         {onAddClick && (
+            <button
+               onClick={onAddClick}
+               className={cn(
+                  avatarWrapperClassName,
+                  addButtonClassName,
+                  getAvatarSize(avatarSize),
+                  getLeftMargin(avatarSize, maxDisplayCount + 1),
+                  "ml-2"
+               )}
+            >
+               +
+            </button>
+         )}
+      </div>
+   );
+};

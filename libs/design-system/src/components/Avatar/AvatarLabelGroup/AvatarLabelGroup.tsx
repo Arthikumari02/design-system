@@ -1,116 +1,125 @@
-import cn from 'classnames'
-import React, { ReactElement, useMemo } from 'react'
-
-import { AvatarLabelSize } from '../../../types'
-import { Avatar, AvatarProps } from '../Avatar'
+import cn from "classnames";
+import { ReactNode, createContext, useContext } from "react";
+import { Avatar } from "../Avatar";
+import { AvatarLabelSize } from '../../../types';
+import { AvatarShape } from "../types";
 import {
+   getAvatarLabelGroupSize,
+   getAvatarLabelStyles,
    getAvatarDescriptionStyles,
    getAvatarLabelMargins,
-   getAvatarLabelGroupSize,
-   getAvatarLabelStyles
-} from '../utils'
+} from "../utils";
 
 import {
    avatarLabelContainerClassName,
    avatarLabelWrapper,
+   labelTextClassName,
    descriptionClassName,
-   labelTextClassName
-} from './styles'
+} from "./styles";
 
-export interface AvatarLabelProps extends AvatarProps {
-   description?: string
-   labelClassName?: string
-   labelDescriptionClassName?: string
-   avatarBgColor?: string
-   avatarTextColor?: string
-   avatarLabelTextContainerClassName?: string
-   renderCustomDescription?: () => React.ReactNode
-   size: AvatarLabelSize
+export interface AvatarLabelRootProps {
+   name: string;
+   size: AvatarLabelSize;
+   description?: string;
+   shape?: AvatarShape;
+   children: ReactNode;
+   className?: string;
 }
 
-const AvatarLabelGroup = (props: AvatarLabelProps) => {
-   const {
-      name,
-      type,
-      shape,
-      size,
-      imageURL,
-      description,
-      userIcon,
-      showStatus,
-      labelClassName,
-      labelDescriptionClassName,
-      avatarBgColor,
-      avatarTextColor,
-      renderCustomDescription,
-      containerClassName,
-      avatarImgContainerClassName,
-      avatarTextClassName,
-      avatarDefaultTextClassName,
-      avatarLabelTextContainerClassName
-   } = props
+interface ContextType {
+   name: string;
+   size: AvatarLabelSize;
+   shape: AvatarShape;
+   description?: string;
+}
 
-   const avatarSize = useMemo(() => getAvatarLabelGroupSize(size), [size])
+const AvatarLabelContext = createContext<ContextType | null>(null);
 
-   const renderAvatarLabel = (): ReactElement => (
-      <p
-         title={name}
-         className={`${cn(labelTextClassName)} 
-                     ${getAvatarLabelStyles(
-                        avatarSize
-                     )} ${labelClassName}        
-                  `}
-      >
-         {name}
-      </p>
-   )
-
-   const renderAvatarDescription = (): ReactElement | null =>
-      description ? (
-         <p
-            title={description}
-            className={`${cn(descriptionClassName)}
-                     ${getAvatarDescriptionStyles(
-                        avatarSize
-                     )} ${labelDescriptionClassName}`}
-         >
-            {description}
-         </p>
-      ) : null
-
-   const renderAvatarLabelDetails = (): ReactElement => (
-      <div
-         className={`${cn(avatarLabelWrapper)} 
-         ${getAvatarLabelMargins(
-            avatarSize
-         )} ${avatarLabelTextContainerClassName}`}
-      >
-         {renderAvatarLabel()}
-         {renderCustomDescription
-            ? renderCustomDescription()
-            : renderAvatarDescription()}
-      </div>
-   )
+const AvatarLabelRoot = ({
+   name,
+   size,
+   description,
+   shape = "Circular",
+   className,
+   children,
+}: AvatarLabelRootProps) => {
 
    return (
-      <div className={cn(avatarLabelContainerClassName, containerClassName)}>
-         <Avatar
-            name={name}
-            type={type}
-            shape={shape}
-            size={avatarSize}
-            imageURL={imageURL}
-            userIcon={userIcon}
-            showStatus={showStatus}
-            bgColor={avatarBgColor}
-            textColor={avatarTextColor}
-            avatarImgContainerClassName={avatarImgContainerClassName}
-            avatarTextClassName={avatarTextClassName}
-            avatarDefaultTextClassName={avatarDefaultTextClassName}
-         />
-         {renderAvatarLabelDetails()}
-      </div>
-   )
-}
+      <AvatarLabelContext.Provider value={{ name, size, shape, description }}>
+         <div className={cn(avatarLabelContainerClassName, className)}>
+            {children}
+         </div>
+      </AvatarLabelContext.Provider>
+   );
+};
 
-export { AvatarLabelGroup }
+const AvatarLabelAvatar = ({ children }: { children: ReactNode }) => {
+   const ctx = useContext(AvatarLabelContext);
+   if (!ctx) return null;
+
+   const avatarSize = getAvatarLabelGroupSize(ctx.size);
+
+   return (
+      <Avatar.Root name={ctx.name} size={avatarSize} shape={ctx.shape}>
+         {children}
+      </Avatar.Root>
+   );
+};
+
+
+const AvatarLabelDetails = ({ children }: { children: ReactNode }) => {
+   const ctx = useContext(AvatarLabelContext);
+   if (!ctx) return null;
+
+   const avatarSize = getAvatarLabelGroupSize(ctx.size);
+   return (
+      <div className={cn(avatarLabelWrapper, getAvatarLabelMargins(avatarSize))}>
+         {children}
+      </div>
+   );
+};
+
+
+const AvatarLabelText = ({ className }: { className?: string }) => {
+   const ctx = useContext(AvatarLabelContext);
+   if (!ctx) return null;
+
+   const avatarSize = getAvatarLabelGroupSize(ctx.size);
+   return (
+      <p
+         className={cn(
+            labelTextClassName,
+            getAvatarLabelStyles(avatarSize),
+            className
+         )}
+      >
+         {ctx.name}
+      </p>
+   );
+};
+
+const AvatarLabelDescription = ({ className }: { className?: string }) => {
+   const ctx = useContext(AvatarLabelContext);
+   if (!ctx || !ctx.description) return null;
+
+   const avatarSize = getAvatarLabelGroupSize(ctx.size);
+   return (
+      <p
+         className={cn(
+            descriptionClassName,
+            getAvatarDescriptionStyles(avatarSize),
+            className
+         )}
+      >
+         {ctx.description}
+      </p>
+   );
+};
+
+export const AvatarLabelGroup = {
+   Root: AvatarLabelRoot,
+   Avatar: AvatarLabelAvatar,
+   Details: AvatarLabelDetails,
+   Text: AvatarLabelText,
+   Description: AvatarLabelDescription,
+};
