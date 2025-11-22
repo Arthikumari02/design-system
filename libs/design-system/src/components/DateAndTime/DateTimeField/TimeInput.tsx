@@ -132,22 +132,24 @@ const TimeInput = (props: Props): React.ReactElement => {
    const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
       setTimeInput(e.target.value)
    }
-
    return (
-      <Input
-         size={props.size}
-         value={timeInput}
-         onChange={onChangeInput}
-         onKeyDown={onKeyDown}
-         onBlur={onBlur}
-         autoFocus={props.autoFocus}
-         className={
-            'w-[96px] text-right border-l border-primary bg-transparent'
-         }
-         placeholder={timeInputStrings?.timePlaceholder ?? '12:00 AM'}
-         disabled={props.isDisabled}
-      />
-   )
+      <div className="flex items-center h-full border-l border-gray-200">
+         <Input.Root size={props.size} className="w-24 h-full">
+            <Input.Field
+               variant="borderless"
+               value={timeInput}
+               onChange={onChangeInput}
+               onKeyDown={onKeyDown}
+               onBlur={onBlur}
+               autoFocus={props.autoFocus}
+               disabled={props.isDisabled}
+               placeholder={timeInputStrings?.timePlaceholder ?? "12:00 AM"}
+               className="w-full h-full px-3 py-2 text-sm text-right text-gray-900 bg-transparent placeholder-gray-400 rounded-none focus:outline-none focus:ring-0 focus:ring-offset-0"
+            />
+         </Input.Root>
+      </div>
+   );
+
 }
 
 export default observer(TimeInput)

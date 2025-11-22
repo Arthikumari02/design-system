@@ -46,23 +46,26 @@ const InputError = ({ children }: { children: React.ReactNode }) => (
 
 interface InputFieldProps extends Omit<InputProps, "size"> {
    error?: boolean;
+   variant?: 'default' | 'borderless';
 }
 
-const InputField = ({ error, ...props }: InputFieldProps) => {
+const InputField = ({ error, variant = 'default', ...props }: InputFieldProps) => {
    const inputRef = useRef<HTMLInputElement>(null);
    const { size } = useInputContext();
+   const shouldBeBorderless = variant === 'borderless';
 
    return (
       <RACInput
          {...props}
          className={({ isDisabled, isFocused }) =>
             classNames(
-               containerStyles,
+               !shouldBeBorderless && containerStyles,
                getElementTypeStyles({
                   isDisabled,
                   isFocused,
                   size,
                   error: error ? "error" : undefined,
+                  variant,
                }),
                props.className
             )

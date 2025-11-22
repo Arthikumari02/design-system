@@ -1,16 +1,22 @@
 import { TEXT_INPUT_THEME } from "./constants";
 import { sizeStyles } from "./sizes";
 import { BasicSize } from "../../../types";
+import { FOCUS_RING_THEME } from "../WithFocusRing/constants";
 
 interface UIStates {
    isDisabled: boolean;
    isFocused: boolean;
    error?: string;
    size?: BasicSize;
+   variant?: 'default' | 'borderless';
 }
 
 export const containerStyles = `
    w-full border rounded-md bg-white transition-all duration-200 relative
+`;
+
+export const containerStylesNoBorder = `
+   w-full bg-transparent transition-all duration-200 relative border-0 rounded-none
 `;
 
 export const rootStyles = "w-full flex flex-col gap-1";
@@ -31,6 +37,7 @@ export const getElementTypeStyles = ({
    isFocused,
    error,
    size,
+   variant = 'default',
 }: UIStates) => {
    const commonStyles = `grow truncate shadow-none focus:outline-none`;
    const sizeContext = sizeStyles[size || "Medium"];
@@ -39,24 +46,28 @@ export const getElementTypeStyles = ({
    const sizeClass = sizeContext.inputClassName;
 
    let textColor = TEXT_INPUT_THEME.default.textColor;
-   let borderColor = TEXT_INPUT_THEME.default.borderColor;
+   let borderColor = variant === 'borderless' ? '' : TEXT_INPUT_THEME.default.borderColor;
    let focusRing = "";
    let backgroundColor = "";
 
    if (isDisabled) {
       textColor = TEXT_INPUT_THEME.disabled.textColor;
-      borderColor = TEXT_INPUT_THEME.disabled.borderColor;
+      borderColor = variant === 'borderless' ? '' : TEXT_INPUT_THEME.disabled.borderColor;
       backgroundColor = "bg-disabled_subtle text-disabled cursor-not-allowed";
    } else if (isFocused) {
       textColor = TEXT_INPUT_THEME.focused.textColor;
-      borderColor = TEXT_INPUT_THEME.focused.borderColor;
-      focusRing = "shadow-[0_0_0_2px_rgba(164,212,255,0.4)] border-[#A4D4FF] transition-all duration-200";
+      if (variant === 'default') {
+         borderColor = FOCUS_RING_THEME.Primary.borderColor;
+         focusRing = `${FOCUS_RING_THEME.Primary.ring} ring-2 ring-offset-1 transition-all duration-200`;
+      }
    }
 
    if (error) {
       textColor = TEXT_INPUT_THEME.error.textColor;
-      borderColor = TEXT_INPUT_THEME.error.borderColor;
-      focusRing = "shadow-none";
+      if (variant === 'default') {
+         borderColor = TEXT_INPUT_THEME.error.borderColor;
+         focusRing = "shadow-none";
+      }
    }
 
    return `

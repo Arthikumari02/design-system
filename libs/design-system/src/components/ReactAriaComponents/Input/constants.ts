@@ -13,19 +13,19 @@ interface InputThemeType {
 export const TEXT_INPUT_THEME: InputThemeType = {
    default: {
       textColor: 'text-primary-900',
-      borderColor: ''
+      borderColor: 'border-primary'
    },
    focused: {
       textColor: 'text-primary-900',
-      borderColor: ''
+      borderColor: 'border-brand'
    },
    disabled: {
       textColor: 'text-disabled',
-      borderColor: ''
+      borderColor: 'border-disabled_subtle'
    },
    error: {
-      textColor: "text-red-600",
-      borderColor: "border-red-500",
+      textColor: "text-error-primary",
+      borderColor: "border-error",
    },
 
 

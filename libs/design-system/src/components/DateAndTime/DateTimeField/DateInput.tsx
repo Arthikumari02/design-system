@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { DateValue } from 'react-aria-components'
 import { CalendarDate } from '@internationalized/date'
 
-import { BasicSize } from '../../../types'
+import { SmallAndMedium } from '../../../types'
 
 import Input from '../../ReactAriaComponents/Input/Input'
 import {
@@ -21,7 +21,7 @@ export interface DateInputStrings {
 }
 
 interface Props {
-   size: BasicSize
+   size: SmallAndMedium
    initialDate?: CalendarDate
    onUpdateDate?: (date: CalendarDate | null) => void
    setValidationResult?: (result: ValidationResultType | null) => void
@@ -120,17 +120,22 @@ const DateInput = (props: Props): React.ReactElement => {
    }
 
    return (
-      <Input
-         size={props.size}
-         value={dateInput}
-         onChange={onChangeInput}
-         onKeyDown={onKeyDown}
-         onBlur={onBlur}
-         autoFocus={props.autoFocus}
-         className={'w-[155px] bg-transparent'}
-         placeholder={dateInputStrings?.datePlaceholder ?? 'dd/mm/yyyy'}
-      />
-   )
+      <div className="relative flex-1">
+         <Input.Root size={props.size} className="w-full h-full">
+            <Input.Field
+               variant="borderless"
+               value={dateInput}
+               onChange={onChangeInput}
+               onKeyDown={onKeyDown}
+               onBlur={onBlur}
+               autoFocus={props.autoFocus}
+               placeholder={dateInputStrings?.datePlaceholder ?? "dd/mm/yyyy"}
+               className="w-full h-full px-3 py-2 text-sm text-gray-900 bg-transparent placeholder-gray-400 rounded-none focus:outline-none focus:ring-0 focus:ring-offset-0"
+            />
+         </Input.Root>
+      </div>
+   );
+
 }
 
 export default observer(DateInput)

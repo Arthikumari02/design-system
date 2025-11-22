@@ -27,7 +27,7 @@ import { tooltipClassName } from './styles'
 
 export interface DateTimeInputStrings
    extends DateInputStrings,
-      TimeInputStrings {}
+   TimeInputStrings { }
 
 interface Props {
    size: SmallAndMedium
@@ -123,9 +123,13 @@ const DateTimeField = (props: Props): React.ReactElement => {
          <Provider values={[[GroupContext, {}]]}>
             <FieldGroup
                size={props.size}
-               className={classNames(props.className, {
-                  'bg-error-primary': validationResult?.isInvalid
-               })}
+               className={classNames(
+                  'focus-within:ring-2 focus-within:ring-primary ',
+                  props.className,
+                  {
+                     'bg-error-primary': validationResult?.isInvalid
+                  }
+               )}
                isInvalid={props.isInvalid || validationResult?.isInvalid}
                data-tooltip-id={tooltipIdRef.current}
             >
