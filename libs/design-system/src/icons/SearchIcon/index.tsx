@@ -11,7 +11,7 @@ const SearchIcon = ({
    <svg
       width={width}
       height={height}
-      fill='none'
+      fill='currentColor'
       xmlns='http://www.w3.org/2000/svg'
       className={className}
       {...props}

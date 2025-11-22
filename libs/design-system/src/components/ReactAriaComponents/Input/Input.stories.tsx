@@ -1,138 +1,186 @@
-import React, { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
+import React, { useState } from "react";
+import type { Meta, StoryObj } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import { Input } from "./Input";
+import { SearchIcon } from "../../../icons/SearchIcon";
+import { TickMark } from "../../../icons/TickMark";
 
-import Input from './Input'
-
-const meta: Meta<typeof Input> = {
-   title: 'Components/RACInput',
-   component: Input,
-   parameters: {
-      layout: 'centered'
-   },
+const meta: Meta<TemplateProps> = {
+   title: "Components/RACInput (Composition)",
+   parameters: { layout: "centered" },
    argTypes: {
       size: {
-         control: 'radio',
-         options: ['ExtraSmall', 'Small', 'Medium'],
-         defaultValue: 'Medium'
+         control: { type: "select" },
+         options: ["ExtraSmall", "Small", "Medium"],
       },
-      type: {
-         control: 'select',
-         options: [
-            'text',
-            'email',
-            'password',
-            'number',
-            'tel',
-            'url',
-            'search'
-         ],
-         defaultValue: 'text'
-      },
-      placeholder: {
-         control: 'text',
-         defaultValue: 'Enter text...'
-      },
-      className: {
-         control: 'text',
-         description: 'Custom CSS class'
-      }
-   }
+      fieldProps: { control: "object" },
+   },
+};
+
+export default meta;
+
+type FieldProps = Omit<
+   React.ComponentProps<typeof Input.Field>,
+   "size" | "className" | "value" | "onChange" | "error"
+>;
+
+interface TemplateProps {
+   size?: "ExtraSmall" | "Small" | "Medium";
+   label?: string;
+   hint?: string;
+   error?: string;
+   showLeftIcon?: boolean;
+   showRightIcon?: boolean;
+   fieldProps?: FieldProps;
 }
 
-export default meta
-
-type Story = StoryObj<typeof Input>
-
-// Template component to handle state
-const InputTemplate: React.FC<any> = args => {
-   const [value, setValue] = useState('')
-
-   const handleValueChange = (newValue: string) => {
-      setValue(newValue)
-      action('onValueChange')(newValue)
-   }
+const Template = (args: TemplateProps) => {
+   const [value, setValue] = useState("");
+   const hasError = Boolean(args.error);
 
    return (
-      <div style={{ padding: '20px', width: '300px' }}>
-         <Input {...args} value={value} onValueChange={handleValueChange} />
-         <div style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>
-            Value: {value || '(empty)'}
-         </div>
+      <div className="w-[320px]">
+         <Input.Root size={args.size}>
+            {args.label && <Input.Label>{args.label}</Input.Label>}
+
+            <Input.Group>
+               {args.showLeftIcon && (
+                  <Input.IconLeft>
+                     <SearchIcon className="text-gray-400 w-4 h-4" />
+                  </Input.IconLeft>
+               )}
+
+               <Input.Field
+                  {...args.fieldProps}
+                  value={value}
+                  onChange={(e) => {
+                     const val = e.target.value;
+                     setValue(val);
+                     action("onValueChange")(val);
+                  }}
+                  error={hasError}
+                  style={{
+                     paddingLeft: args.showLeftIcon ? "2.5rem" : undefined,
+                     paddingRight: args.showRightIcon ? "2.5rem" : undefined,
+                  }}
+               />
+
+               {args.showRightIcon && (
+                  <Input.IconRight>
+                     <TickMark className="w-4 h-4 text-green-500" />
+                  </Input.IconRight>
+               )}
+            </Input.Group>
+
+            {hasError && <Input.Error>{args.error}</Input.Error>}
+            {!hasError && args.hint && <Input.Hint>{args.hint}</Input.Hint>}
+         </Input.Root>
       </div>
-   )
-}
+   );
+};
 
-// Stories
-export const Default: Story = {
-   render: args => <InputTemplate {...args} />,
+export const Default: StoryObj<TemplateProps> = {
+   render: Template,
    args: {
-      size: 'Medium'
-   }
-}
+      size: "Medium",
+      label: "Email",
+      fieldProps: { placeholder: "Enter email" }
+   },
+};
 
-export const SmallSize: Story = {
-   render: args => <InputTemplate {...args} />,
+export const Disabled: StoryObj<TemplateProps> = {
+   render: Template,
    args: {
-      size: 'Small'
-   }
-}
+      label: "Email",
+      fieldProps: { placeholder: "Enter email", disabled: true },
+   },
+};
 
-export const ExtraSmallSize: Story = {
-   render: args => <InputTemplate {...args} />,
+export const WithHint: StoryObj<TemplateProps> = {
+   render: Template,
    args: {
-      size: 'ExtraSmall'
-   }
-}
+      label: "Email",
+      hint: "We'll never share your email with anyone else.",
+      fieldProps: { placeholder: "Enter email" }
+   },
+};
 
-export const EmailInput: Story = {
-   render: args => <InputTemplate {...args} />,
+export const WithError: StoryObj<TemplateProps> = {
+   render: Template,
    args: {
-      size: 'Medium',
-      type: 'email',
-      placeholder: 'Enter email address...'
-   }
-}
+      label: "Email",
+      error: "Please enter a valid email address.",
+      fieldProps: { placeholder: "Enter email" }
+   },
+};
 
-export const PasswordInput: Story = {
-   render: args => <InputTemplate {...args} />,
+export const WithLeftIcon: StoryObj<TemplateProps> = {
+   render: Template,
    args: {
-      size: 'Medium',
-      type: 'password',
-      placeholder: 'Enter password...'
-   }
-}
+      label: "Search",
+      showLeftIcon: true,
+      fieldProps: { placeholder: "Search..." }
+   },
+};
 
-export const NumberInput: Story = {
-   render: args => <InputTemplate {...args} />,
+export const WithRightIcon: StoryObj<TemplateProps> = {
+   render: Template,
    args: {
-      size: 'Medium',
-      type: 'number',
-      placeholder: 'Enter number...'
-   }
-}
+      label: "Email",
+      showRightIcon: true,
+      fieldProps: { placeholder: "Enter email" }
+   },
+};
 
-export const SearchInput: Story = {
-   render: args => <InputTemplate {...args} />,
+export const WithBothIcons: StoryObj<TemplateProps> = {
+   render: Template,
    args: {
-      size: 'Medium',
-      type: 'search',
-      placeholder: 'Search...'
-   }
-}
+      label: "Email",
+      showLeftIcon: true,
+      showRightIcon: true,
+      fieldProps: { placeholder: "Search emails..." }
+   },
+};
 
-export const WithCustomClass: Story = {
-   render: args => <InputTemplate {...args} />,
+export const ErrorWithIcon: StoryObj<TemplateProps> = {
+   render: Template,
    args: {
-      size: 'Medium',
-      className: 'custom-input-class'
-   }
-}
+      label: "Email",
+      error: "Invalid email format.",
+      showLeftIcon: true,
+      showRightIcon: true,
+   },
+};
 
-export const WithDefaultValue: Story = {
-   render: args => <InputTemplate {...args} />,
+export const EmailInput: StoryObj<TemplateProps> = {
+   render: Template,
    args: {
-      size: 'Medium',
-      defaultValue: 'Default text value'
-   }
-}
+      label: "Email",
+      fieldProps: { type: "email", placeholder: "you@example.com" },
+   },
+};
+
+export const PasswordInput: StoryObj<TemplateProps> = {
+   render: Template,
+   args: {
+      label: "Password",
+      fieldProps: { type: "password", placeholder: "Enter password" },
+   },
+};
+
+export const NumberInput: StoryObj<TemplateProps> = {
+   render: Template,
+   args: {
+      label: "Age",
+      fieldProps: { type: "number", placeholder: "Enter age" },
+   },
+};
+
+export const SearchInput: StoryObj<TemplateProps> = {
+   render: Template,
+   args: {
+      label: "Search",
+      showLeftIcon: true,
+      fieldProps: { type: "search", placeholder: "Type to search..." },
+   },
+};

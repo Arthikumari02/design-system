@@ -6,12 +6,12 @@ interface SizesType {
 
 export const sizeStyles: Record<BasicSize, SizesType> = {
    ExtraSmall: {
-      inputClassName: 'text-sm-regular'
+      inputClassName: 'text-md-regular py-sm px-md gap-md'
    },
    Small: {
-      inputClassName: 'text-md-regular'
+      inputClassName: 'text-md-regular py-sm px-md gap-md'
    },
    Medium: {
-      inputClassName: 'text-md-regular'
+      inputClassName: 'text-md-regular py-md px-lg gap-md'
    }
 }
